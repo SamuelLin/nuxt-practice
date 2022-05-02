@@ -1,16 +1,17 @@
 <template>
   <div class="container">
     <div class="box">
-      <h1>Todo List</h1>
+      <h1>{{ $t('todo-list') }}</h1>
 
       <div>
-        <ListItem />
-        <ListItem active />
+        <div v-if="!todoList.length" class="no-data">
+          <p>no data</p>
+        </div>
+        <ListItem v-for="item in todoList" v-bind="item" />
       </div>
 
       <div class="input-content">
         <input type="text" placeholder="請輸入要做的事" v-model="inputValue" @keyup.enter="onSumit">
-
         <div id="submit-button" @click="onSumit">
           <img src="~/assets/img/plus-solid.png" alt="">
         </div>
@@ -21,21 +22,29 @@
 
 <script setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useStore } from '../store/index'
 
+const store = useStore()
+const { todoList } = storeToRefs(store)
 const inputValue = ref('')
 
-function onSumit() {
+async function onSumit() {
+  if (!inputValue.value) return
+
+  const todoName = inputValue.value
   inputValue.value = ''
+
+  await store.addTodo(todoName)
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 55px;
 }
 
 .box {
@@ -45,6 +54,11 @@ function onSumit() {
   border: 1px solid #c7c7c6;
   background-color: white;
   padding: 10px 17px;
+}
+
+.no-data {
+  margin: 20px 10px;
+  color: #ccc;
 }
 
 .input-content {

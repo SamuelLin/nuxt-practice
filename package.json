@@ -9,5 +9,11 @@
   "devDependencies": {
     "nuxt": "3.0.0-rc.1",
     "sass": "^1.51.0"
+  },
+  "dependencies": {
+    "@intlify/nuxt3": "^0.2.1",
+    "@pinia/nuxt": "^0.1.8",
+    "pinia": "^2.0.13",
+    "uuid": "^8.3.2"
   }
 }
